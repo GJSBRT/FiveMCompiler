@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"flag"
     "os"
     "bufio"
     "regexp"
@@ -17,6 +18,7 @@ import (
 )
 
 var (
+    resourceDirectory string
     eventTypes = []string{
         "AddEventHandler", 
         "RegisterNetEvent",
@@ -30,6 +32,8 @@ var (
 )
 
 func init() {
+    flag.StringVar(&resourceDirectory, "dir", "./test", "A path to the resource directory")
+	flag.Parse()
     rand.Seed(time.Now().UnixNano())
 }
 
@@ -37,7 +41,7 @@ func main() {
 	fmt.Println("Running")
 	
     /* Read all events */
-    err := filepath.Walk("./test", func(path string, info os.FileInfo, err error) error {
+    err := filepath.Walk(resourceDirectory, func(path string, info os.FileInfo, err error) error {
         if err != nil {
             return err
         }
@@ -52,14 +56,14 @@ func main() {
     if err != nil {
         fmt.Println(err)
     }
-    
+/*     
     for k, v := range events {
         fmt.Println(k, " ", v)
-    }
+    } */
 
     /* Rename all events */
     fmt.Println("Renaming events")
-    err = filepath.Walk("./test", func(path string, info os.FileInfo, err error) error {
+    err = filepath.Walk(resourceDirectory, func(path string, info os.FileInfo, err error) error {
         if err != nil {
             return err
         }
@@ -81,7 +85,7 @@ func main() {
                 }
 
                 for oldEvent, newEvent := range events {
-                    fmt.Println("Renaming " + oldEvent + " to " + newEvent + " in " + path)
+                    //fmt.Println("Renaming " + oldEvent + " to " + newEvent + " in " + path)
 
                     read = bytes.Replace(read, []byte(oldEvent), []byte(newEvent), -1)
                 }
