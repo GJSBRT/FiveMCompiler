@@ -6,3 +6,8 @@ as it renames events.
 ## Functionality
 - Renames events
 - Minifies code
+
+## Running
+```sh
+./fivemcompiler --dir "./resources"
+```
